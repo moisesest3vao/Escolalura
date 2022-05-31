@@ -3,6 +3,7 @@ package br.com.alura.escolalura.escolalura.model;
 import org.bson.types.ObjectId;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +57,9 @@ public class Aluno {
     }
 
     public List<Habilidade> getHabilidades() {
+        if(this.habilidades == null){
+            this.habilidades = new ArrayList<Habilidade>();
+        }
         return habilidades;
     }
 
@@ -66,5 +70,13 @@ public class Aluno {
     public Aluno criarId() {
         this.setId(new ObjectId());
         return this;
+    }
+
+    public Aluno adicionarHabilidade(Aluno aluno, Habilidade habilidade) {
+        List<Habilidade> habilidades = aluno.getHabilidades();
+        habilidades.add(habilidade);
+        aluno.setHabilidades(habilidades);
+
+        return aluno;
     }
 }

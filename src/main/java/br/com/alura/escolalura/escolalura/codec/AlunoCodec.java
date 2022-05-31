@@ -10,6 +10,7 @@ import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,7 +71,15 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
         document.put("nome", nome);
         document.put("data_nascimento", dataNascimento);
         document.put("curso", new Document("nome", curso.getNome()));
+        if(habilidades != null){
+            List<Document> habilidadesDocument = new ArrayList<>();
+            for(Habilidade hab : habilidades){
+                habilidadesDocument.add(new Document("nome", hab.getNome())
+                        .append("nivel", hab.getNivel()));
+            }
 
+            document.put("habilidades", habilidadesDocument);
+        }
         this.codec.encode(writer,document,encoder);
     }
 

@@ -7,10 +7,12 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -37,7 +39,11 @@ public class AlunoRepository {
     public void save(Aluno aluno){
         createConnection();
         MongoCollection<Aluno> alunos = this.db.getCollection("alunos", Aluno.class);
-        alunos.insertOne(aluno);
+        if(aluno.getId() == null){
+            alunos.insertOne(aluno);
+        } else {
+            alunos.updateOne(Filters.eq("_id", aluno.getId()), new Document("$set", aluno));
+        }
         client.close();
     }
 
@@ -54,5 +60,13 @@ public class AlunoRepository {
         }
         client.close();
         return alunosList;
+    }
+
+    public Aluno findById(String id) {
+        createConnection();
+        MongoCollection<Aluno> alunos = this.db.getCollection("alunos", Aluno.class);
+        Aluno aluno = alunos.find(Filters.eq("_id", new ObjectId(id))).first();
+        client.close();
+        return aluno;
     }
 }

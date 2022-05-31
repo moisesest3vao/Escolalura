@@ -3,9 +3,9 @@ package br.com.alura.escolalura.escolalura.model;
 public class Curso {
     private String nome;
 
-    public Curso(String nomeCurso) {
-        this.nome = nomeCurso;
-    }
+    public Curso(){}
+
+    public Curso(String nomeCurso) { this.nome = nomeCurso; }
 
     public String getNome() {
         return nome;
